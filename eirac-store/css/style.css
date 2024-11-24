@@ -1,6 +1,5 @@
 @import 'framework.min.css';
-/* THIS IS A FREE VERSION OF STARTUP! */
-/* 
+/*
 	Table of contents:
 	1. Common styles
 	2. Common responsive styles
@@ -137,7 +136,7 @@ b, strong {
   top: 0;
 }
 
-/* Change AOS plugin default settings */
+/* ubah plugin aos default setting */
 [data-aos=fade-down] {
   transform: translate3d(0, -35px, 0);
 }
