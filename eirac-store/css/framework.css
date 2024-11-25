@@ -1,5 +1,5 @@
 @charset "UTF-8";
-/* Change bootstrap's .container default width */
+/* .container lebar default */
 @media (min-width: 768px) {
   .container {
     max-width: 750px;
