@@ -1,53 +1,27 @@
 <?php
-/* This script allows you to receive data from forms to your email */
 
-/* SETTINGS */
-
-// URL of this file using https
+// URL file ini menggunakan https
 $scriptUrl = "https://".$_SERVER["HTTP_HOST"].$_SERVER["SCRIPT_NAME"];
 // Email "subject"
 $title = 'New message from my Landing page';
-// Email field "From" - name of sender (e.g. your first & last name)
-$from_name = "John Jonson";
-// Email field "From" - email of sender (e.g. "robot@domain.com")
+$from_name = "Customer";
 $from_email = "robot@domain.com";
-// Email to receive message - PUT YOUR EMAIL HERE (or leave it blank if you won't receive emails)
-$to = ""; // e.g. my@email.com"
-// Telegram integration: token of created bot
-//(leave string empty if you don't want to use Telegram integration or check how to get Token here: https://designmodo.com/startup/documentation/#telegram)
+$to = "aditiachandra08@gmail.com";
 $telegramToken ='';
-// Telegram integration: ID of chat with created bot to send message
-//(leave string empty if you don't want to use Telegram integration or check how to get Chat ID here: https://designmodo.com/startup/documentation/#telegram)
 $telegramChatId = '';
-// Viber integration: token of created bot
-//(leave string empty if you don't want to use Viber integration or check how to get Token here: https://designmodo.com/startup/documentation/#viber)
 $viberToken = '';
-// MailChimp integration: Your API key 
-//(leave string empty if you don't want to use MailChimp integration or check how to get your API key here: https://designmodo.com/startup/documentation/#mailchimp)
 $MailChimpAPIkey = '';
-// MailChimp integration: ID of list where contact will be added to
-//(leave string empty if you don't want to use MailChimp integration or check how to get ID of list here: https://designmodo.com/startup/documentation/#mailchimp)
 $MailChimpListID = '';
-// SendInBlue integration: Your API key 
-//(leave string empty if you don't want to use SendInBlue integration or check how to get your API key here: https://designmodo.com/startup/documentation/#sendinblue)
 $sendInBlueAPIkey = '';
-// SendInBlue integration: ID of list where contact will be added to
-//(leave string empty if you don't want to use SendInBlue integration or check how to get ID of list here: https://designmodo.com/startup/documentation/#sendinblue)
-$sendInBlueListIDs = array(); // IDs of lists to add contact to; separate by comma
-// HubSpot integration: Your API key 
-//(leave string empty if you don't want to use HubSpot integration or check how to get your API key here: https://designmodo.com/startup/documentation/#hubspot)
+$sendInBlueListIDs = array(); // ID daftar untuk menambahkan kontak; pisahkan dengan koma.
 $hubSpotAPIkey = '';
-// Google ReCaptcha "secret". Please, get it on https://www.google.com/recaptcha/admin/create
-//(leave string empty if you don't want to use gReCaptcha in your forms; learn more about gReCaptcha integration: https://designmodo.com/startup/documentation/#grecaptcha)
 $gRecaptchaSecret = '';
-
-/* END OF SETTINGS */
 
 $message = '';
 
 if (!empty($_POST)){
 	
-	/* CHECK RECAPCHA RESPONSE */
+	/* PERIKSA RESPON RECAPCHA */
 	if(!empty($gRecaptchaSecret)){
 		if(!empty($_POST["g-recaptcha-response"])){
 			$params = array("secret"=>$gRecaptchaSecret, "response"=>$_POST["g-recaptcha-response"]);
@@ -66,9 +40,8 @@ if (!empty($_POST)){
 			exit;
 		}
 	}
-	/* END OF CHECK RECAPCHA */
 	
-	/* COLLECT DATA FROM FORM FIELDS */
+	/* PENGUMPULAN DATA DARI BIDANG FORMULIR */
 	foreach($_POST as $fieldKey=>$fieldValue){
 		if(!empty($fieldValue)){
 			switch($fieldKey){
@@ -196,9 +169,8 @@ if (!empty($_POST)){
 			}
 		}
 	}
-	/* END OF COLLECT DATA FROM FORM FIELDS */
 	
-	/* SEND DATA FROM FORMS TO YOUR EMAIL */
+	/* PENGIRIMAN DATA DARI FORMULIR KE EMAIL */
 	if(!empty($to)){
 		$subject = $title;
 		$headers = "Content-Type: text/html; charset=UTF-8\r\n";
@@ -208,7 +180,7 @@ if (!empty($_POST)){
 		$mail = mail($to, $subject, $message, $headers); // send email
 	}
 	
-	/* MAILCHIMP INTEGRATION */
+	/* INTEGRASI MAILCHIMP */
 	
 	if(!empty($MailChimpAPIkey) && !empty($MailChimpListID) && !empty($_POST['email'])){
 		
@@ -216,9 +188,9 @@ if (!empty($_POST)){
 		$MailChimpAddRequestUrl = 'https://'.$MailChimpSubdomain.'.api.mailchimp.com/3.0/lists/'.$MailChimpListID.'/members/';
 		$MailChimpEditRequestUrl = 'https://'.$MailChimpSubdomain.'.api.mailchimp.com/3.0/lists/'.$MailChimpListID.'/members/'.md5(strtolower($_POST['email']));
 		
-		// The data to send to the API
+		// Data yang akan dikirim ke API
 		if(!empty($MailChimpContact["ADDRESS"])){
-			// Check required fields for address, they should not be empty
+			// Periksa kolom alamat yang wajib diisi, jangan kosong
 			if(empty($MailChimpContact["ADDRESS"]["addr1"])) $MailChimpContact["ADDRESS"]["addr1"]='Address not set';
 			if(empty($MailChimpContact["ADDRESS"]["city"])) $MailChimpContact["ADDRESS"]["city"]='City not set';
 			if(empty($MailChimpContact["ADDRESS"]["state"])) $MailChimpContact["ADDRESS"]["state"]='State not set';
@@ -243,11 +215,11 @@ if (!empty($_POST)){
 			),
 			CURLOPT_POSTFIELDS => json_encode($SubscriberData),
 		));
-		// Send the request
+		// kirim request
 		$MailChimpResult = json_decode(curl_exec($ch));
 		curl_close($ch);
 		
-		// if this member already in your MailChimp list, update his info
+		// jika anggota ini sudah ada di daftar MailChimp, perbarui infonya.
 		if($MailChimpResult->status==400 && $MailChimpResult->title=="Member Exists"){ 
 			$ch = curl_init($MailChimpEditRequestUrl);
 			curl_setopt_array($ch, array(
@@ -258,15 +230,13 @@ if (!empty($_POST)){
 				CURLOPT_SSL_VERIFYPEER  => false,
 				CURLOPT_POSTFIELDS => json_encode($SubscriberData),  
 			));
-			// Send the request
+			// Send request
 			$MailChimpResult = json_decode(curl_exec($ch));
 			curl_close($ch);
 		}
 	}
 	
-	/* END OF MAILCHIMP INTEGRATION */
-	
-	/* SENDINBLUE INTEGRATION */
+	/* KIRIM INTEGRASI BIRU */
 	
 	if(!empty($sendInBlueAPIkey) && !empty($sendInBlueListIDs) && (!empty($_POST['email']) || !empty($_POST['phone']))){
 		
@@ -318,10 +288,8 @@ if (!empty($_POST)){
 			curl_close($ch);
 		}
 	}
-	
-	/* END OF SENDINBLUE INTEGRATION */
-	
-	/* HUBSPOT INTEGRATION */
+		
+	/* INTEGRASI HUBSPOT */
 
 	if(!empty($hubSpotAPIkey)){
 		if(!empty($hubSpotContact)){
@@ -371,9 +339,7 @@ if (!empty($_POST)){
 		}
 	}
 	
-	/* END OF HUBSPOT INTEGRATION */
-	
-	/* TELEGRAM INTEGRATION */
+	/* INTEGRASI TELEGRAM */
 	
 	if(!empty($telegramChatId) && !empty($telegramToken)){
 		$telegramMessage = $message;
@@ -390,10 +356,8 @@ if (!empty($_POST)){
 			curl_close($curl);
 		}
 	}
-
-	/* END OF TELEGRAM INTEGRATION */
 	
-	/* VIBER INTEGRATION */
+	/* INTEGRASI VIBER */
 	
 	if(!empty($viberToken)){
 		if(file_exists("viberUserID.txt") && file_exists("viberWebHook.txt")){
@@ -420,7 +384,7 @@ if (!empty($_POST)){
 					"text"=>$viberMessage,
 				)),
 			));
-			// Send the request
+			// Send request
 			$viberResult = json_decode(curl_exec($ch),true);
 			if($viberResult["status"]==0 && $viberResult["status_message"]=="ok"){
 				$viberResult = "ok";
@@ -428,7 +392,7 @@ if (!empty($_POST)){
 				$viberResult = 'Error: Message was not sent. Viber error message: '.$viberResult["status_message"].'. Check <a href="https://designmodo.com/startup/documentation/#viber" target="_blank" class="link color-transparent-white">how to set up viber integration</a>.';
 			}
 		}else{
-			if(!file_exists("viberWebHook.txt")){ // webhook is not set
+			if(!file_exists("viberWebHook.txt")){ // webhook bawaan, tidak ter set
 				$ch = curl_init("https://chatapi.viber.com/pa/set_webhook");
 				curl_setopt_array($ch, array(
 					CURLOPT_POST => TRUE,
@@ -443,7 +407,7 @@ if (!empty($_POST)){
 						"send_photo"=> true
 					)),
 				));
-				// Send the request
+				// Send request
 				$viberResult = json_decode(curl_exec($ch), true);
 				if($viberResult["status_message"]=="ok"){
 					$f = fopen("viberWebHook.txt","w");
@@ -459,9 +423,7 @@ if (!empty($_POST)){
 		}
 	}
 	
-	/* END OF VIBER INTEGRATION */
-	
-	/* MAKE A RESPONSE */
+	/* MEMBUAT RESPON */
 	
 	$response = "Error: unknown error. Please, check if your hosting supports PHP.";
 	
@@ -518,18 +480,18 @@ if (!empty($_POST)){
 
 if(!empty($viberToken)){
 	$viberUserFile = "viberUserID.txt";
-	if(!file_exists($viberUserFile)){ // create file if not exists
+	if(!file_exists($viberUserFile)){ // buat file jika tidak ada
 		$f = fopen($viberUserFile,"w");
 		fclose($f);
 		clearstatcache();		
 	}
 	$viberUserID = file_get_contents($viberUserFile);
-	if(strlen($viberUserID)==0){ // if no stored users to send messages
-		$callback = file_get_contents("php://input"); // callback from viber
+	if(strlen($viberUserID)==0){ // jika tidak ada pengguna yang disimpan untuk mengirim pesan
+		$callback = file_get_contents("php://input"); // memanggil kembali dari viber
 		$callbackArray = json_decode($callback,true);
 		if(!empty($callbackArray["event"])){
 			if($callbackArray["event"]=="message" || $callbackArray["event"]=="conversation_started" || $callbackArray["event"]=="subscribed"){
-				// save ID of user who have interaction with bot
+				// save ID  user yang mempunyai interaksi dengan bot
 				if($callbackArray["event"]!="message"){
 					$userId = $callbackArray["user"]["id"];
 				}else{
