@@ -1,6 +1,5 @@
 <?php
 
-// URL file ini menggunakan https
 $scriptUrl = "https://".$_SERVER["HTTP_HOST"].$_SERVER["SCRIPT_NAME"];
 // Email "subject"
 $title = 'New message from my Landing page';
