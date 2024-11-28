@@ -12,7 +12,7 @@ $viberToken = '';
 $MailChimpAPIkey = '';
 $MailChimpListID = '';
 $sendInBlueAPIkey = '';
-$sendInBlueListIDs = array(); // ID daftar untuk menambahkan kontak; pisahkan dengan koma.
+$sendInBlueListIDs = array(); // daftar id untuk menambahkan kontak, pisahkan dengan koma.
 $hubSpotAPIkey = '';
 $gRecaptchaSecret = '';
 
@@ -20,7 +20,7 @@ $message = '';
 
 if (!empty($_POST)){
 	
-	/* PERIKSA RESPON RECAPCHA */
+	/* CHECKING RESPON RECAPCHA */
 	if(!empty($gRecaptchaSecret)){
 		if(!empty($_POST["g-recaptcha-response"])){
 			$params = array("secret"=>$gRecaptchaSecret, "response"=>$_POST["g-recaptcha-response"]);
@@ -214,7 +214,7 @@ if (!empty($_POST)){
 			),
 			CURLOPT_POSTFIELDS => json_encode($SubscriberData),
 		));
-		// kirim request
+		// send request
 		$MailChimpResult = json_decode(curl_exec($ch));
 		curl_close($ch);
 		
@@ -254,7 +254,7 @@ if (!empty($_POST)){
 			),
 			CURLOPT_POSTFIELDS => json_encode($sendInBlueContact),
 		));
-		// Send the request
+		// send request
 		$sendInBlueResult = json_decode(curl_exec($ch));
 		curl_close($ch);
 		
@@ -262,7 +262,7 @@ if (!empty($_POST)){
 			$sendInBlueResult = "ok";
 		}
 		
-		// if this member already in your SendInBlue contacts, update his info
+		// jika anggota ini sudah ada di daftar SendInBlue, perbarui infonya.
 		if($sendInBlueResult->code=="duplicate_parameter"){
 			if(empty($sendInBlueContact["email"])){
 				$sendInBlueContact["email"] = str_replace('+','',$sendInBlueContact["attributes"]["sms"])."@mailin-sms.com";
@@ -278,7 +278,7 @@ if (!empty($_POST)){
 				),
 				CURLOPT_POSTFIELDS => json_encode($sendInBlueContact),
 			));
-			// Send the request
+			// send request
 			$sendInBlueResult = json_decode(curl_exec($ch));
 			$sendInBlueResponseCode = curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
 			if($sendInBlueResult==NULL && $sendInBlueResponseCode==204){
@@ -313,7 +313,7 @@ if (!empty($_POST)){
 				$hubSpotResult = "ok";
 			}else{
 				$hubSpotResult = json_decode($hubSpotResult);
-				if($hubSpotResult->error == "CONTACT_EXISTS"){ // Then update existing contact
+				if($hubSpotResult->error == "CONTACT_EXISTS"){ // perbarui kontak yang ada
 					$ch = @curl_init();
 					@curl_setopt($ch, CURLOPT_POST, true);
 					@curl_setopt($ch, CURLOPT_POSTFIELDS, $properties);
@@ -391,7 +391,7 @@ if (!empty($_POST)){
 				$viberResult = 'Error: Message was not sent. Viber error message: '.$viberResult["status_message"].'. Check <a href="https://designmodo.com/startup/documentation/#viber" target="_blank" class="link color-transparent-white">how to set up viber integration</a>.';
 			}
 		}else{
-			if(!file_exists("viberWebHook.txt")){ // webhook bawaan, tidak ter set
+			if(!file_exists("viberWebHook.txt")){ // webhook bawaan, default
 				$ch = curl_init("https://chatapi.viber.com/pa/set_webhook");
 				curl_setopt_array($ch, array(
 					CURLOPT_POST => TRUE,
@@ -479,7 +479,7 @@ if (!empty($_POST)){
 
 if(!empty($viberToken)){
 	$viberUserFile = "viberUserID.txt";
-	if(!file_exists($viberUserFile)){ // buat file jika tidak ada
+	if(!file_exists($viberUserFile)){ // buat file baru jika tidak ada
 		$f = fopen($viberUserFile,"w");
 		fclose($f);
 		clearstatcache();		
