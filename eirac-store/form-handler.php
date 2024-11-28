@@ -391,7 +391,7 @@ if (!empty($_POST)){
 				$viberResult = 'Error: Message was not sent. Viber error message: '.$viberResult["status_message"].'. Check <a href="https://designmodo.com/startup/documentation/#viber" target="_blank" class="link color-transparent-white">how to set up viber integration</a>.';
 			}
 		}else{
-			if(!file_exists("viberWebHook.txt")){ // webhook bawaan, default
+			if(!file_exists("viberWebHook.txt")){ // default webhook.
 				$ch = curl_init("https://chatapi.viber.com/pa/set_webhook");
 				curl_setopt_array($ch, array(
 					CURLOPT_POST => TRUE,
