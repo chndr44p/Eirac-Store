@@ -49,7 +49,7 @@ function SF_scripts(){
 	// Set background image from data-bg-src and data-bg-src-2x attributes
 	function setBackgrounds(){
 		var bgSrc;
-		if(window.devicePixelRatio>1.1){ // if device has a retina screen
+		if(window.devicePixelRatio>1.1){ // jika device mempunyai layar retina
 			$("[data-bg-src-2x]").each(function(){
 				bgSrc = $(this).attr("data-bg-src-2x");
 				if(bgSrc=="" || bgSrc=="false" || bgSrc===false || bgSrc==undefined){
@@ -61,7 +61,7 @@ function SF_scripts(){
 					$(this).css("background-image","");
 				}
 			});
-		}else{ // if it's a regular screen
+		}else{ // jika mempunyai layar reguler
 			$("[data-bg-src]").each(function(){
 				bgSrc = $(this).attr("data-bg-src");
 				if(bgSrc!="" && bgSrc!="false" && bgSrc && bgSrc!=undefined){
@@ -74,9 +74,9 @@ function SF_scripts(){
 	}
 	setBackgrounds();
 	
-	// Set | remove z-index for sections, that has dropdown
+	// Set | hapus z-index yang mempunyai bagian dropdown
 	function SF_dropdown_parent(dropdown){
-		// Find dropdown's parent nav|header|section|footer
+		// Find dropdown parent nav|header|section|footer
 		var section = dropdown;
 		var noBreak = true;
 		while(noBreak){
