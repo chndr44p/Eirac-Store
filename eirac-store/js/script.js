@@ -24,7 +24,7 @@ function SF_scripts(){
 
 	$(window).trigger("resize");
 
-	// open menu on mobile
+	// membuka menu melalui device mobile
 	function showMenuBtn(){
 		if($(window).width()<1199.98){
 			$(".open_menu").addClass("d-block");
@@ -76,7 +76,7 @@ function SF_scripts(){
 	
 	// Set | hapus z-index yang mempunyai bagian dropdown
 	function SF_dropdown_parent(dropdown){
-		// Find dropdown parent nav|header|section|footer
+		// mencari class dropdown nav|header|section|footer
 		var section = dropdown;
 		var noBreak = true;
 		while(noBreak){
@@ -96,7 +96,7 @@ function SF_scripts(){
 		return section;
 	}
 	function SF_highest_zIndex(){
-		// Find nav|header|section|footer with highest z-index on page
+		// mencari nav|header|section|footer dengan index-z tertinggi di halaman
 		var zIndex = 1;
 		var currentzIndex;
 		var section;
@@ -110,19 +110,19 @@ function SF_scripts(){
 		return [zIndex, section];
 	}
 	
-	// Set highest z-index for section, that has opened dropdown
+	// Set bagian index-z tertinggi yang telah membuka dropdown
 	$(".dropdown").on("show.bs.dropdown", function () {
 		var section = SF_dropdown_parent($(this));
 		section.css("z-index",SF_highest_zIndex()[0]+1);	
 	});
 	
-	// Remove z-index for section, where dropdown was closed
+	// menghapus index-z untuk bagianyang dimana dropdown telah tertutup
 	$(".dropdown").on("hidden.bs.dropdown", function () {
 		var section = SF_dropdown_parent($(this));
 		section.css("z-index","auto");	
 	})
 	
-	// Navigation dropdown popup
+	// popup navigasi dropdown
 	if($(".js-nav-dropdowns").length>0){
 		$("body").click(function(event){
 			if($(event.target).closest(".navigation_popup").length==0 && $(event.target).closest(".js-open-nav-dropdown").length==0){
@@ -148,7 +148,7 @@ function SF_scripts(){
 		});
 	}
 	
-	// Enable AOS plugin (blocks animations)
+	// Enable plugis AOS (blocks animations)
 	if(typeof(AOS) !== 'undefined' && $("body").hasClass("SFG_body")===false){
 		AOS.init({
 			easing: 'ease-out-cubic',
@@ -241,7 +241,7 @@ function SF_scripts(){
 		}
 	});
 	
-	// Close gReCaptcha popup
+	// menutup popup grecaptcha
 	$(".grecaptcha-overlay").click(function(){
 		hidegRecaptchaPopup();
 	});
@@ -254,7 +254,7 @@ function SF_scripts(){
 		}
 	}
 
-	// Function to add style to form, when user clicks to input inside it
+	// Fungsi untuk menambahkan gaya ke formulir, ketika pengguna mengklik untuk memasukkan di dalamnya
 	function focusForm(formID){
 		var form = $("#"+formID);
 		if(form.hasClass("focused")){
@@ -264,7 +264,7 @@ function SF_scripts(){
 		}
 	}
 
-	// Resize video, saving aspect ratio
+	// Resize video, menyimpan aspek rasio
 	function resizeVideo(){
 		var width, height, ratio;
 		$(".video").each(function(){
@@ -279,7 +279,7 @@ function SF_scripts(){
 
 	resizeVideo();
 
-	// Play video
+	// memutar video
 	$(".video .play").click(function(){
 		var video = $(this).parent().parent().find("video");
 		$(this).closest(".poster").fadeOut(300,function(){
@@ -292,7 +292,7 @@ function SF_scripts(){
 		});
 	});
 	
-	// Opening tabs
+	// membuka tab
 	function openTab(tab){
 		if(tab.hasClass("opened")){
 			$(".tab_text").animate({height:0},300);
@@ -318,7 +318,7 @@ function SF_scripts(){
 		});
 	}
 
-	// Copy text from block
+	// mengcopy text dari blok
 	if($("#copy_from_me").length > 0){
 		function copyStringToClipboard (str) {
 		   var el = document.createElement('textarea');
@@ -335,7 +335,7 @@ function SF_scripts(){
 		});
 	}
 
-	// Add mask to inputs in Forms
+	// menambahkan masker untuk meng-input dibagian halaman
 	if($(".js-card-mask").length > 0){
 		$(".js-card-mask").mask("9999 9999 9999 9999");
 	}
@@ -349,7 +349,7 @@ function SF_scripts(){
 		$(".js-cvv-mask").mask("999");
 	}
 	
-	// Disable / enable blocks in Form 13
+	// Disable / enable blok di halaman 13
 	$(".form_13 input[type=radio]").change(function(){
 		var choosenBlock = $(".form_13 input[type=radio]:checked").closest(".js-form-block");
 		$(".js-form-block").removeClass("active");
@@ -376,7 +376,7 @@ function SF_scripts(){
 		}
 	});
 	
-	// Ecommerce: Remove products from cart
+	// Ecommerce: menghapus produk dari keranjang
 	$(".remove_product").click(function(event){
 		event.preventDefault();
 		var product = $(this).closest(".product");
@@ -395,7 +395,7 @@ function SF_scripts(){
 		})
 	});
 	
-	// Ecommerce: Set discount
+	// Ecommerce: mensetting diskon
 	$(".ecommerce_33 input[name=coupon]").change(function(){
 		if($(this).val()!=""){
 			var discount = $(".ecommerce_33 .discount").attr("data-discount");
@@ -408,7 +408,7 @@ function SF_scripts(){
 		}
 	});
 	
-	// Ecommerce: Count total price
+	// Ecommerce: menghitung total harga
 	if($(".ecommerce_33 .product").length>0){
 		$(".ecommerce_33 .quantity_selector input").change(function(){
 			count_totals_ecommerce_33();
@@ -512,7 +512,7 @@ function SF_scripts(){
 		count_totals_ecommerce_38();
 	}
 
-	// Google maps initialisation
+	// inisialisasi google maps
 	if($(".js-google-map").length>0){
 		$(".js-google-map").each(function(){
 			
