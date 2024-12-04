@@ -15,7 +15,7 @@
     max-width: 1170px;
   }
 }
-/* Font styles */
+/* Font style */
 .underline {
   text-decoration: underline;
 }
@@ -184,7 +184,7 @@
   line-height: 36px;
 }
 .btn.md {
-  /* regular size */
+  /* size regular */
 }
 .btn.lg {
   height: 60px;
@@ -574,13 +574,13 @@ select.color-white option {
   background: #fff;
 }
 
-/* Textareas */
+/* Text area */
 textarea.input {
   padding-top: 15px;
   padding-bottom: 15px;
 }
 
-/* Checkboxes */
+/* Check box */
 input[type=checkbox], input[type=radio] {
   /* Borders */
   /* Backgrounds */
